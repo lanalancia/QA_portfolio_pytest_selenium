@@ -1,21 +1,23 @@
 from selenium.webdriver.common.by import By
 
 
-# Локаторы разных страниц в разных классах для соблюдения Page Object Pattern
+"""This file contains locators for all project. Locators for each page contained in a specific class."""
+
+
 class LocatorsAutomationPracticeForm:
+
+    """Locators for https://demoqa.com/automation-practice-form"""
+
     INPUT_FIELD_FIRST_NAME = (By.XPATH, '//div/input[@placeholder="First Name"]')
     INPUT_FIELD_LAST_NAME = (By.XPATH, '//div/input[@placeholder="Last Name"]')
     INPUT_FIELD_EMAIL = (By.XPATH, '//*[contains(text(),\'Email\')]/../..//input')
     INPUT_FIELD_PHONE_NUMBER = (By.XPATH, '//*[contains(text(), "Mobile")]/../..//input')
-
-    # Радиокнопки и флаги не кликаются, локаторы указывают на лейблы
     RADIO_GENDER_MALE = (By.XPATH, '//*[contains(text(), "Male")]')
     RADIO_GENDER_FEMALE = (By.XPATH, '//*[contains(text(), "Female")]')
     RADIO_GENDER_OTHER = (By.XPATH, '//*[contains(text(), "Other")]')
     FLAG_HOBBY_SPORTS = (By.XPATH, '//*[contains(text(), "Sports")]')
     FLAG_HOBBY_READING = (By.XPATH, '//*[contains(text(), "Reading")]')
     FLAG_HOBBY_MUSIC = (By.XPATH, '//*[contains(text(), "Music")]')
-
     INPUT_FIELD_DOB = (By.XPATH, '//*[contains(text(), \'Date of Birth\')]/../..//input')
     OBJECT_DATEPICKER = (By.XPATH, '//*[@class="react-datepicker"]')
     FIELD_SUBJECTS = (By.XPATH, '//*[contains(text(), "Subjects")]/../../div/div/div')
@@ -33,17 +35,15 @@ class LocatorsAutomationPracticeForm:
     BUTTON_SUBMIT = (By.XPATH, '//*[contains(text(), "Submit")]')
     BUTTON_CLOSE = (By.XPATH, '//*[contains(text(), "Close")]')
 
+
 class LocatorsWebtables:
 
-    # используется для поиска локатора с конкретным именем. В рамках этого задания: для поиска кнопок EDIT и DELETE в
-    # строке с именем Ciera или Auto_name
-    _person_name = ""
+    """Locators for https://demoqa.com/webtables"""
 
     def set_metadata(self, value):
         self._person_name = value
+    _person_name = ""
 
-    # Декораторы, позволяющие вызывать методы в качестве переменных. Это нужно для упрощения написания кода,
-    # сохраняя возможность подставлять в локатор желаемые значения. QOL feature
     @property
     def BUTTON_EDIT(self):
         return By.XPATH, f"//*[@class='rt-table']/*[2]//*[contains(text(), '{self._person_name}')]/..//*[@title='Edit']"
