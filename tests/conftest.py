@@ -5,4 +5,4 @@ import pytest
 
 @pytest.fixture
 def create_webdriver():
-    return webdriver.Chrome(service=Service(r"chromedriver.exe"))
+    return webdriver.Chrome()
