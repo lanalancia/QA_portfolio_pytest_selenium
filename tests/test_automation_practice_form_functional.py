@@ -1,5 +1,3 @@
-import time
-
 from locators import LocatorsAutomationPracticeForm
 from common_methods import Methods
 
