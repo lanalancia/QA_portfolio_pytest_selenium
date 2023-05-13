@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append('../QA_portfolio_pytest_selenium')
+
 from locators import LocatorsAutomationPracticeForm
 from common_methods import Methods
 
@@ -18,16 +22,18 @@ def test_submit_required_only(create_webdriver):
 
     driver.maximize_window()
     driver.get("https://demoqa.com/automation-practice-form")
-    """Advertisments bypass"""
-    driver.get("https://demoqa.com/automation-practice-form")
     methods.click_and_input(locators.INPUT_FIELD_FIRST_NAME, "FirstName")
     methods.click_and_input(locators.INPUT_FIELD_LAST_NAME, "LastName")
     methods.click_and_input(locators.INPUT_FIELD_PHONE_NUMBER, "0123456789")
     methods.click(locators.RADIO_GENDER_MALE)
-    methods.click_with_offset(locators.BUTTON_SUBMIT, 0, -10)
+    """Advertisements bypass. Sometimes advertisements are overlapping the submit button. A script presses the ENTER 
+    instead."""
+    methods.click(locators.INPUT_FIELD_FIRST_NAME)
+    methods.press_enter_here()
 
     """Check if \"Thanks for submitting information\" block is present """
     assert methods.locator_is_present(locators.OBJECT_SUBMITTED_INFO), "Submit confirmation window not appears"
+
 
 def test_submit_full_info(create_webdriver):
     driver = create_webdriver
@@ -57,7 +63,10 @@ def test_submit_full_info(create_webdriver):
     methods.click(locators.DROPDOWN_STATE_1ST)
     methods.click(locators.DROPDOWN_CITY)
     methods.click(locators.DROPDOWN_CITY_1ST)
-    methods.click_with_offset(locators.BUTTON_SUBMIT, 0, -12)
+    """Advertisements bypass. Sometimes advertisements are overlapping the submit button. A script presses the ENTER 
+    instead."""
+    methods.click(locators.INPUT_FIELD_FIRST_NAME)
+    methods.press_enter_here()
 
     """Check if \"Thanks for submitting information\" block is present """
     assert methods.locator_is_present(locators.OBJECT_SUBMITTED_INFO), "Submit confirmation window not appears"
