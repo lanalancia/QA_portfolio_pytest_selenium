@@ -12,78 +12,78 @@ class Methods:
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 4)
 
-    # Найти элемент по локатору
+    """Find element by locator"""
     def find(self, element):
         return self.wait.until(EC.visibility_of_element_located(element))
 
-    # Проверяет, можно ли найти элемент. Возвращает элемент или False
-    def locator_is_present(self, element):
+    """Checks if element exists"""
+    def locator_is_present(self, element) -> bool:
         try:
             self.wait.until(EC.visibility_of_element_located(element))
             return True
         except TimeoutException:
             return False
 
-    # Кликнуть по элементу
+    """Click the element."""
     def click(self, element):
         self.find(element).click()
 
-    # Кликнуть по элементу и ввести текст в этот элемент (например, если нужно ввести текст в поле)
+    """Click the element, then enter a text."""
     def click_and_input(self, element, text: str):
         self.click(element)
         self.driver.switch_to.active_element.send_keys(text)
         pass
 
-    # ввести текст в элемент независимо от того, в фокусе он или нет
+    """Input text into a current active element."""
     def input_text(self, element, text: str):
         self.find(element).send_keys(text)
         pass
 
-    # Очистить текст с помощью ввода на клавиатуре.
+    """Clear the text. it uses keyboard emulation for authentic user-like input."""
     def clear_here(self):
         self.driver.switch_to.active_element.send_keys(Keys.CONTROL, "a")
         self.driver.switch_to.active_element.send_keys(Keys.BACKSPACE)
 
-    # Нажать Enter на клавиатуре. Используется как один из способов выбрать первый элемент списка
+    """Emulate pressing of ENTER key."""
     def press_enter_here(self):
         self.driver.switch_to.active_element.send_keys(Keys.ENTER)
 
-    # Нажать на поле и заменить текст в этом поле другим текстом
+    """Clicking the element and replacing it with a text."""
     def click_and_replace(self, element, text: str):
         self.click(element)
         self.replace_here(text)
 
-    # Заменить текст в элементе, на котором сейчас фокус, другим текстом
+    """Replacing a text input in a current active element."""
     def replace_here(self, text: str):
         self.driver.switch_to.active_element.send_keys(Keys.CONTROL, "a")
         self.driver.switch_to.active_element.send_keys(text)
 
-    # Ввод текста в элемент, который находится в фокусе
+    """Input text into a current focused field."""
     def input_text_here(self, text: str):
         self.driver.switch_to.active_element.send_keys(text)
 
-    # Загрузка файла с помощью send_keys. Файл загружается из папки с репозиторием
+    """Upload a file. It searches the file in a project folder."""
     def unload_file(self, element, file_path: str):
         self.find(element).send_keys(os.getcwd() + "/" + file_path)
 
-    # Кликнуть по кнопке со смещением курсора. Используется если центр кнопки перекрыт другими элементами
+    """Emitting a click on element. Instead of just clicking element, it moves the pointer on top of that element, 
+    then clicking. The x and y variables allows to offset the click in case if the centre of element is partially 
+    covered."""
     def click_with_offset(self, element, x=0, y=0):
-        ActionChains(self.driver).move_to_element_with_offset(self.find(element),
-                                                              x, y).click().perform()
+        ActionChains(self.driver).move_to_element_with_offset(self.find(element), x, y).click().perform()
 
-    # Получить текст элемента, нужно для assert
-    def get_element_text(self, element):
+    """Get element text. Returns string"""
+    def get_element_text(self, element) -> str:
         return self.find(element).text
 
-    # Сравнить текст элемента с текстом в параметрах
-    def compare_element_text_with(self, element, text: str):
+    """Compare element text with a sample text. Returns bool."""
+    def compare_element_text_with(self, element, text: str) -> bool:
         return self.get_element_text(element) == text
         pass
 
 
-# Этот класс нужен чтобы сделатть множество assert в одном автотесте, не прекращая его исполнение после первой ошибки.
-# После выполнения теста будут отображены ошибки, которые были обнаружены.
-# Если в assert_single не будет указан параметр message, но ошибка произошла - будет выведен порядковый номер ассёрта.
+"""A helper class, allows to use multiple assertions in a same test, without stopping the script after a first error. 
+It also provides the list of errors occured."""
 class MultiAssertHandler:
     def __init__(self):
         self.errors = ""
@@ -93,9 +93,7 @@ class MultiAssertHandler:
     def assert_single(self, check_value, message=""):
         self.counter += 1
         if not check_value:
-            # Если сообщение об ошибке передано через параметр - выводится сообщение.
-            # Если сообщение не было передано - заменяется на дефолтное + порядковый номер вызова assert_single.
-            # Это QOL feature.
+            """If user set the error message - adds message to a list of messages. Otherwise index of error."""
             self.errors += "\n"
             self.errors += f"Unnamed error, assertion #{str(self.counter)}" if message == "" else message
             self.failed = True
