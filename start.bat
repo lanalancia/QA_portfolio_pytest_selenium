@@ -1,4 +1,3 @@
 call install.py
 
-pytest tests/test_automation_practice_form_functional.py
-pytest tests/test_webtables_functional.py
+pytest tests/
